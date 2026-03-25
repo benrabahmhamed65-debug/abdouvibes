@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Start Your Journey — AbdouVibe</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Syne:wght@400;600;800&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --neon:#00f5d4; --pink:#ff2d78; --purple:#9b5de5;
+    --yellow:#fee440; --dark:#050810; --dark2:#0d1117;
+    --card:rgba(255,255,255,0.04);
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Syne',sans-serif;background:var(--dark);color:#e8eaf0;overflow-x:hidden;cursor:none;}
+
+  /* CURSOR */
+  .cursor{width:14px;height:14px;background:var(--neon);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:99999;box-shadow:0 0 12px var(--neon),0 0 30px var(--neon);mix-blend-mode:screen;}
+  .cursor-trail{width:36px;height:36px;border:1.5px solid rgba(0,245,212,0.4);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:99998;transition:transform 0.18s ease;}
+
+  /* BG */
+  .bg-grid{position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(0,245,212,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,212,0.03) 1px,transparent 1px);background-size:60px 60px;transform:rotateX(60deg) scale(2.5) translateY(-10%);transform-origin:top center;animation:gridMove 12s linear infinite;}
+  @keyframes gridMove{from{background-position:0 0;}to{background-position:0 60px;}}
+  .orb{position:fixed;border-radius:50%;filter:blur(80px);opacity:0.12;pointer-events:none;}
+  .orb1{width:500px;height:500px;background:var(--purple);top:-100px;left:-100px;animation:of 8s ease-in-out infinite alternate;}
+  .orb2{width:400px;height:400px;background:var(--pink);bottom:-50px;right:-80px;animation:of 8s ease-in-out 3s infinite alternate;}
+  @keyframes of{from{transform:translate(0,0);}to{transform:translate(30px,-40px);}}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(5,8,16,0.8);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,245,212,0.1);}
+  .logo{font-family:'Orbitron',monospace;font-weight:900;font-size:1.4rem;color:var(--neon);text-shadow:0 0 20px var(--neon);letter-spacing:2px;text-decoration:none;}
+  .logo span{color:var(--pink);}
+  .back-btn{font-family:'Orbitron',monospace;font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;padding:0.6rem 1.4rem;border-radius:6px;background:transparent;color:var(--neon);border:1px solid rgba(0,245,212,0.3);transition:all 0.2s;cursor:none;}
+  .back-btn:hover{background:rgba(0,245,212,0.08);border-color:var(--neon);}
+
+  /* PAGE HEADER */
+  .page-hero{padding:10rem 2rem 4rem;text-align:center;position:relative;z-index:1;}
+  .page-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:3px;color:var(--neon);text-transform:uppercase;border:1px solid rgba(0,245,212,0.3);padding:0.4rem 1.2rem;border-radius:100px;background:rgba(0,245,212,0.06);margin-bottom:1.5rem;}
+  .page-hero h1{font-family:'Orbitron',monospace;font-size:clamp(2.2rem,6vw,5rem);font-weight:900;line-height:1.1;color:#fff;margin-bottom:1.2rem;}
+  .page-hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--neon),var(--purple),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .page-hero p{font-size:1.05rem;color:#8892b0;max-width:580px;margin:0 auto;line-height:1.8;}
+
+  /* PROGRESS TRACKER */
+  .progress-section{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:2rem 2rem 0;}
+  .progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+  .progress-header span{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--neon);letter-spacing:2px;}
+  .progress-bar-wrap{background:rgba(255,255,255,0.05);border-radius:100px;height:6px;overflow:hidden;}
+  .progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--neon),var(--purple));border-radius:100px;transition:width 0.6s ease;width:0%;}
+
+  /* WEEK TABS */
+  .week-tabs{position:relative;z-index:1;max-width:900px;margin:2rem auto 0;padding:0 2rem;display:flex;gap:0.6rem;flex-wrap:wrap;}
+  .week-tab{font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:1px;padding:0.5rem 1.1rem;border-radius:8px;border:1px solid rgba(255,255,255,0.08);color:#4a5568;background:transparent;cursor:none;transition:all 0.2s;}
+  .week-tab.active{background:rgba(0,245,212,0.12);border-color:rgba(0,245,212,0.4);color:var(--neon);}
+  .week-tab.done{background:rgba(0,245,212,0.05);border-color:rgba(0,245,212,0.2);color:rgba(0,245,212,0.5);}
+  .week-tab.done::after{content:' ✓';}
+
+  /* WEEK CONTENT */
+  .week-content{position:relative;z-index:1;max-width:900px;margin:1.5rem auto 0;padding:0 2rem;}
+  .week-panel{display:none;}
+  .week-panel.active{display:block;animation:fadeIn 0.4s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+  .week-card{background:var(--card);border:1px solid rgba(0,245,212,0.12);border-radius:20px;padding:2.5rem;margin-bottom:1.5rem;}
+  .week-card-header{display:flex;align-items:center;gap:1.2rem;margin-bottom:1.8rem;}
+  .week-emoji{font-size:2.5rem;filter:drop-shadow(0 0 10px rgba(0,245,212,0.3));}
+  .week-card-header h2{font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:900;color:#fff;}
+  .week-card-header p{font-size:0.82rem;color:#4a5568;margin-top:0.2rem;}
+  .week-desc{font-size:0.92rem;color:#8892b0;line-height:1.9;margin-bottom:2rem;}
+  .week-desc strong{color:var(--neon);}
+
+  /* TASK LIST */
+  .task-list{display:flex;flex-direction:column;gap:0.7rem;margin-bottom:2rem;}
+  .task-item{display:flex;align-items:center;gap:1rem;padding:1rem 1.2rem;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.05);border-radius:10px;transition:all 0.2s;cursor:none;}
+  .task-item:hover{border-color:rgba(0,245,212,0.15);background:rgba(0,245,212,0.03);}
+  .task-item.checked{opacity:0.5;}
+  .task-item.checked .task-text{text-decoration:line-through;color:#4a5568;}
+  .task-check{width:22px;height:22px;border-radius:6px;border:2px solid rgba(0,245,212,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;cursor:none;}
+  .task-item.checked .task-check{background:var(--neon);border-color:var(--neon);color:var(--dark);font-size:0.8rem;}
+  .task-text{font-size:0.88rem;color:#a0aec0;flex:1;}
+
+  /* CODE EXAMPLE */
+  .code-block{background:rgba(13,17,23,0.95);border:1px solid rgba(0,245,212,0.1);border-radius:12px;overflow:hidden;margin-bottom:2rem;}
+  .code-block-header{display:flex;align-items:center;gap:0.5rem;padding:0.8rem 1.2rem;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.05);}
+  .dot{width:10px;height:10px;border-radius:50%;}
+  .dot-r{background:#ff5f57;}.dot-y{background:#febc2e;}.dot-g{background:#28c840;}
+  .code-title{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:#4a5568;margin-left:auto;margin-right:auto;padding-right:60px;}
+  .code-body{padding:1.4rem 1.8rem;font-family:'JetBrains Mono',monospace;font-size:0.8rem;line-height:2;}
+  .ln{color:#2d3748;margin-right:1.5rem;user-select:none;}
+  .kw{color:#ff79c6;}.fn{color:#50fa7b;}.str{color:#f1fa8c;}.cm{color:#6272a4;font-style:italic;}.nt{color:var(--neon);}.vr{color:#bd93f9;}
+
+  /* RESOURCES */
+  .resources-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;}
+  .resource-card{background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1.2rem;transition:all 0.2s;}
+  .resource-card:hover{border-color:rgba(0,245,212,0.2);transform:translateY(-3px);}
+  .resource-card .r-icon{font-size:1.5rem;margin-bottom:0.5rem;display:block;}
+  .resource-card h4{font-family:'Orbitron',monospace;font-size:0.75rem;color:#fff;margin-bottom:0.3rem;}
+  .resource-card p{font-size:0.75rem;color:#4a5568;}
+  .resource-card .r-tag{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--neon);margin-top:0.5rem;display:block;}
+
+  /* NAV BTNS */
+  .week-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1rem;margin-bottom:4rem;}
+  .w-btn{font-family:'Orbitron',monospace;font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:0.9rem 2rem;border-radius:8px;border:none;cursor:none;transition:all 0.2s;}
+  .w-btn-prev{background:transparent;color:#4a5568;border:1px solid rgba(255,255,255,0.08);}
+  .w-btn-prev:hover{color:var(--neon);border-color:rgba(0,245,212,0.3);}
+  .w-btn-next{background:linear-gradient(135deg,var(--neon),var(--purple));color:var(--dark);box-shadow:0 0 20px rgba(0,245,212,0.3);}
+  .w-btn-next:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(0,245,212,0.5);}
+  .w-btn:disabled{opacity:0.3;pointer-events:none;}
+
+  /* QUIZ */
+  .quiz-box{background:rgba(13,17,23,0.9);border:1px solid rgba(155,93,229,0.2);border-radius:16px;padding:2rem;margin-bottom:2rem;}
+  .quiz-box h4{font-family:'Orbitron',monospace;font-size:0.85rem;color:var(--purple);margin-bottom:0.4rem;letter-spacing:2px;}
+  .quiz-q{font-size:1rem;font-weight:600;color:#e2e8f0;margin-bottom:1.4rem;line-height:1.6;}
+  .quiz-options{display:flex;flex-direction:column;gap:0.6rem;}
+  .quiz-opt{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:0.9rem 1.2rem;font-size:0.88rem;color:#8892b0;cursor:none;transition:all 0.2s;text-align:left;}
+  .quiz-opt:hover{border-color:rgba(155,93,229,0.3);background:rgba(155,93,229,0.06);color:#e2e8f0;}
+  .quiz-opt.correct{border-color:var(--neon);background:rgba(0,245,212,0.1);color:var(--neon);}
+  .quiz-opt.wrong{border-color:var(--pink);background:rgba(255,45,120,0.08);color:var(--pink);}
+  .quiz-result{margin-top:1rem;font-size:0.88rem;padding:0.8rem 1.2rem;border-radius:8px;display:none;}
+  .quiz-result.show{display:block;}
+  .quiz-result.ok{background:rgba(0,245,212,0.08);color:var(--neon);border:1px solid rgba(0,245,212,0.2);}
+  .quiz-result.bad{background:rgba(255,45,120,0.08);color:var(--pink);border:1px solid rgba(255,45,120,0.2);}
+
+  /* REVEAL */
+  .reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-track{background:var(--dark2);}
+  ::-webkit-scrollbar-thumb{background:rgba(0,245,212,0.3);border-radius:3px;}
+
+  @media(max-width:768px){nav{padding:1rem 1.5rem;}.week-tabs{padding:0 1rem;}.week-content{padding:0 1rem;}.week-nav{flex-direction:column;gap:1rem;}.w-btn{width:100%;}}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="trail"></div>
+<div class="bg-grid"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<nav>
+  <a href="./abdouvibe.html" class="logo">Abdou<span>Vibe</span></a>
+  <a href="./abdouvibe.html" class="back-btn">← Back to Home</a>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero reveal">
+  <div class="page-badge">🚀 Interactive Learning Path</div>
+  <h1>Your Coding <em>Journey</em> Starts Here</h1>
+  <p>6 weeks. Real projects. AI by your side. Follow the path, check off tasks, and build your skills week by week.</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-section reveal">
+  <div class="progress-header">
+    <span>YOUR PROGRESS</span>
+    <span id="progress-label">Week 1 of 6</span>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-fill"></div>
+  </div>
+</div>
+
+<!-- WEEK TABS -->
+<div class="week-tabs reveal" id="week-tabs">
+  <button class="week-tab active" onclick="goWeek(0)">Week 1</button>
+  <button class="week-tab" onclick="goWeek(1)">Week 2</button>
+  <button class="week-tab" onclick="goWeek(2)">Week 3</button>
+  <button class="week-tab" onclick="goWeek(3)">Week 4</button>
+  <button class="week-tab" onclick="goWeek(4)">Week 5</button>
+  <button class="week-tab" onclick="goWeek(5)">Week 6</button>
+</div>
+
+<!-- WEEK PANELS -->
+<div class="week-content">
+
+  <!-- WEEK 1 -->
+  <div class="week-panel active" id="panel-0">
+    <div class="week-card reveal">
+      <div class="week-card-header">
+        <span class="week-emoji">🌱</span>
+        <div>
+          <h2>Week 1 — The Foundation</h2>
+          <p>Set up your environment and write your first code</p>
+        </div>
+      </div>
+      <p class="week-desc">
+        Welcome to your first week! This week is all about getting set up and writing your very first lines of code. Don't worry about understanding everything perfectly — the goal is to get familiar with the tools, see code run, and <strong>feel the excitement of making something work</strong>.
+        <br><br>
+        You'll install VS Code (the most popular code editor in the world), learn what variables and functions actually are, and write your first real JavaScript program. By the end of this week, you should have a working "Hello World" and understand how a browser reads code.
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+          <span class="code-title">week1_starter.js</span>
+        </div>
+        <div class="code-body">
+          <div><span class="ln">1</span><span class="cm">// Your very first JavaScript program!</span></div>
+          <div><span class="ln">2</span><span class="kw">const</span> <span class="vr">yourName</span> = <span class="str">"Abdou"</span>; <span class="cm">// change this to your name</span></div>
+          <div><span class="ln">3</span><span class="kw">const</span> <span class="vr">year</span> = <span class="nt">2026</span>;</div>
+          <div><span class="ln">4</span>&nbsp;</div>
+          <div><span class="ln">5</span><span class="kw">function</span> <span class="fn">introduce</span>(name, yr) {</div>
+          <div><span class="ln">6</span>&nbsp;&nbsp;<span class="kw">return</span> <span class="str">`Hi! I'm ${name} and I started coding in ${yr}. 🚀`</span>;</div>
+          <div><span class="ln">7</span>}</div>
+          <div><span class="ln">8</span>&nbsp;</div>
+          <div><span class="ln">9</span>console.<span class="fn">log</span>( <span class="fn">introduce</span>(yourName, year) );</div>
+          <div><span class="ln">10</span><span class="cm">// Open DevTools (F12) → Console to see the output</span></div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Orbitron',monospace;font-size:0.9rem;color:#fff;margin-bottom:1rem;">✅ Week 1 Tasks — Check off as you go:</h3>
+      <div class="task-list" id="tasks-0">
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Download and install VS Code from code.visualstudio.com</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Install the "Live Server" extension in VS Code</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Create your first index.html file with a heading and paragraph</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Link a script.js file and write the introduce() function above</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Open DevTools (F12) and see your output in the Console tab</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Watch: "HTML in 100 Seconds" and "JavaScript in 100 Seconds" on YouTube</span></div>
+      </div>
+
+      <div class="quiz-box">
+        <h4>// WEEK 1 QUIZ</h4>
+        <p class="quiz-q">What keyword in JavaScript creates a variable whose value cannot be reassigned?</p>
+        <div class="quiz-options" id="quiz-0">
+          <button class="quiz-opt" onclick="answer(this,'wrong','quiz-0','res-0')">var</button>
+          <button class="quiz-opt" onclick="answer(this,'wrong','quiz-0','res-0')">let</button>
+          <button class="quiz-opt" onclick="answer(this,'correct','quiz-0','res-0')">const</button>
+          <button class="quiz-opt" onclick="answer(this,'wrong','quiz-0','res-0')">fixed</button>
+        </div>
+        <div class="quiz-result" id="res-0"></div>
+      </div>
+
+      <h3 style="font-family:'Orbitron',monospace;font-size:0.9rem;color:#fff;margin-bottom:1rem;">📚 Week 1 Resources:</h3>
+      <div class="resources-grid">
+        <div class="resource-card"><span class="r-icon">📺</span><h4>Fireship YouTube</h4><p>Fast, fun 100-second explainers for every tech concept</p><span class="r-tag">FREE</span></div>
+        <div class="resource-card"><span class="r-icon">📖</span><h4>MDN Web Docs</h4><p>The official reference for HTML, CSS, and JavaScript</p><span class="r-tag">FREE</span></div>
+        <div class="resource-card"><span class="r-icon">🎮</span><h4>freeCodeCamp</h4><p>Interactive exercises that run in your browser</p><span class="r-tag">FREE</span></div>
+        <div class="resource-card"><span class="r-icon">🤖</span><h4>Ask Claude</h4><p>"Explain variables to me like I'm 10 years old"</p><span class="r-tag">FREE</span></div>
+      </div>
+    </div>
+    <div class="week-nav">
+      <button class="w-btn w-btn-prev" disabled>← Previous</button>
+      <button class="w-btn w-btn-next" onclick="goWeek(1)">Week 2: AI Tools →</button>
+    </div>
+  </div>
+
+  <!-- WEEK 2 -->
+  <div class="week-panel" id="panel-1">
+    <div class="week-card reveal">
+      <div class="week-card-header">
+        <span class="week-emoji">🤖</span>
+        <div>
+          <h2>Week 2 — Meet Your AI Partner</h2>
+          <p>Learn to prompt AI and build your first AI-assisted project</p>
+        </div>
+      </div>
+      <p class="week-desc">
+        This week you meet your most powerful tool: AI. You'll set up GitHub Copilot or start using Claude/ChatGPT directly, and you'll learn the single most important meta-skill of vibe coding — <strong>how to write a great prompt</strong>.
+        <br><br>
+        A great prompt has four parts: <strong>Context</strong> (what are you building?), <strong>Constraints</strong> (what language/framework?), <strong>Example</strong> (here's what I mean...), and <strong>Ask</strong> (what exactly do you want?). By the end of this week, you'll build a to-do app almost entirely with AI help — then read every line it gave you.
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+          <span class="code-title">prompt_template.txt</span>
+        </div>
+        <div class="code-body">
+          <div><span class="ln">1</span><span class="cm">// Great Prompt Formula:</span></div>
+          <div><span class="ln">2</span><span class="nt">CONTEXT:</span>  <span class="str">I'm building a to-do list app in vanilla JavaScript.</span></div>
+          <div><span class="ln">3</span><span class="nt">STACK:</span>    <span class="str">HTML, CSS, and plain JS. No frameworks.</span></div>
+          <div><span class="ln">4</span><span class="nt">EXAMPLE:</span>  <span class="str">When the user types a task and hits Enter, it appears</span></div>
+          <div><span class="ln">5</span>          <span class="str">in a list below with a checkbox to mark it done.</span></div>
+          <div><span class="ln">6</span><span class="nt">ASK:</span>      <span class="str">Write the addTask() function and the HTML input field.</span></div>
+          <div><span class="ln">7</span>&nbsp;</div>
+          <div><span class="ln">8</span><span class="cm">// vs. a bad prompt:</span></div>
+          <div><span class="ln">9</span><span class="vr">BAD:</span>      <span class="str">"make a todo app"</span></div>
+          <div><span class="ln">10</span><span class="cm">// Too vague → mediocre output</span></div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Orbitron',monospace;font-size:0.9rem;color:#fff;margin-bottom:1rem;">✅ Week 2 Tasks:</h3>
+      <div class="task-list" id="tasks-1">
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Create a free account on claude.ai or chatgpt.com</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Ask AI: "Explain how JavaScript arrays work with 3 examples"</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Use the prompt formula above to build a to-do list app</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Read every line of the code AI gave you — ask it to explain any line you don't understand</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Add one feature to your to-do app yourself (hint: ask AI for help!)</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Optional: Install GitHub Copilot extension in VS Code (requires free GitHub account)</span></div>
+      </div>
+
+      <div class="quiz-box">
+        <h4>// WEEK 2 QUIZ</h4>
+        <p class="quiz-q">Which of these is the BEST way to prompt an AI coding assistant?</p>
+        <div class="quiz-options" id="quiz-1">
+          <button class="quiz-opt" onclick="answer(this,'wrong','quiz-1','res-1')">"make me a website"</button>
+          <button class="quiz-opt" onclick="answer(this,'wrong','quiz-1','res-1')">"JavaScript please"</button>
+          <button class="quiz-opt" onclick="answer(this,'correct','quiz-1','res-1')">"Build a weather widget in vanilla JS that fetches from OpenWeather API and shows temp + city name"</button>
+          <button class="quiz-opt" onclick="answer(this,'wrong','quiz-1','res-1')">"write the code for me"</button>
+        </div>
+        <div class="quiz-result" id="res-1"></div>
+      </div>
+
+      <div class="resources-grid">
+        <div class="resource-card"><span class="r-icon">🤖</span><h4>Claude.ai</h4><p>Best for explanations, reasoning and complex code</p><span class="r-tag">FREE TIER</span></div>
+        <div class="resource-card"><span class="r-icon">💬</span><h4>ChatGPT</h4><p>Great all-rounder for code generation and ideas</p><span class="r-tag">FREE TIER</span></div>
+        <div class="resource-card"><span class="r-icon">⚡</span><h4>Cursor Editor</h4><p>AI built into your code editor — game changer</p><span class="r-tag">FREE TIER</span></div>
+        <div class="resource-card"><span class="r-icon">🔮</span><h4>Bolt.new</h4><p>Build full apps from one prompt in the browser</p><span class="r-tag">FREE</span></div>
+      </div>
+    </div>
+    <div class="week-nav">
+      <button class="w-btn w-btn-prev" onclick="goWeek(0)">← Week 1</button>
+      <button class="w-btn w-btn-next" onclick="goWeek(2)">Week 3: Web Dev →</button>
+    </div>
+  </div>
+
+  <!-- WEEK 3 -->
+  <div class="week-panel" id="panel-2">
+    <div class="week-card reveal">
+      <div class="week-card-header">
+        <span class="week-emoji">🌐</span>
+        <div>
+          <h2>Week 3 — Web Dev Fundamentals</h2>
+          <p>Master HTML, CSS, and the DOM — the building blocks of every website</p>
+        </div>
+      </div>
+      <p class="week-desc">
+        This week you go deep on the foundations of the web. <strong>HTML</strong> gives your page structure (headings, paragraphs, buttons, forms). <strong>CSS</strong> gives it style (colors, fonts, layout, animations). <strong>JavaScript</strong> makes it alive (respond to clicks, update content, animate things).
+        <br><br>
+        Together these three are called the <strong>DOM stack</strong> — Document Object Model. Learning how they interact is the single most valuable thing a web developer can know. This week you'll build a full personal portfolio page using AI and your own customizations.
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+          <span class="code-title">dom_basics.js</span>
+        </div>
+        <div class="code-body">
+          <div><span class="ln">1</span><span class="cm">// The DOM — how JS talks to your HTML</span></div>
+          <div><span class="ln">2</span><span class="kw">const</span> <span class="vr">btn</span> = document.<span class="fn">querySelector</span>(<span class="str">"#myButton"</span>);</div>
+          <div><span class="ln">3</span><span class="kw">const</span> <span class="vr">box</span> = document.<span class="fn">querySelector</span>(<span class="str">".colorBox"</span>);</div>
+          <div><span class="ln">4</span>&nbsp;</div>
+          <div><span class="ln">5</span>btn.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () => {</div>
+          <div><span class="ln">6</span>&nbsp;&nbsp;box.style.background = <span class="str">"#00f5d4"</span>;</div>
+          <div><span class="ln">7</span>&nbsp;&nbsp;box.textContent = <span class="str">"You clicked me! 🎉"</span>;</div>
+          <div><span class="ln">8</span>});</div>
+          <div><span class="ln">9</span>&nbsp;</div>
+          <div><span class="ln">10</span><span class="cm">// querySelector finds HTML elements by CSS selector</span></div>
+          <div><span class="ln">11</span><span class="cm">// addEventListener listens for events (click, hover, keypress...)</span></div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Orbitron',monospace;font-size:0.9rem;color:#fff;margin-bottom:1rem;">✅ Week 3 Tasks:</h3>
+      <div class="task-list" id="tasks-2">
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Learn CSS Flexbox using Flexbox Froggy (flexboxfroggy.com) — complete all 24 levels</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Learn CSS Grid using Grid Garden (cssgridgarden.com)</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Build a personal portfolio with: hero section, about me, skills, and contact</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Add a button that changes the page's color theme (light/dark toggle)</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Make it mobile responsive (use CSS media queries or ask AI how)</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Share your portfolio link with one person and get feedback</span></div>
+      </div>
+
+      <div class="quiz-box">
+        <h4>// WEEK 3 QUIZ</h4>
+        <p class="quiz-q">In CSS, which property is used to make elements sit side-by-side in a row?</p>
+        <div class="quiz-options" id="quiz-2">
+          <button class="quiz-opt" onclick="answer(this,'wrong','quiz-2','res-2')">display: block</button>
+          <button class="quiz-opt" onclick="answer(this,'correct','quiz-2','res-2')">display: flex</button>
+          <button class="quiz-opt" onclick="answer(this,'wrong','quiz-2','res-2')">position: inline</button>
+          <button class="quiz-opt" onclick="answer(this,'wrong','quiz-2','res-2')">float: left</button>
+        </div>
+        <div class="quiz-result" id="res-2"></div>
+      </div>
+
+      <div class="resources-grid">
+        <div class="resource-card"><span class="r-icon">🐸</span><h4>Flexbox Froggy</h4><p>Learn Flexbox by playing a game</p><span class="r-tag">FREE</span></div>
+        <div class="resource-card"><span class="r-icon">🥕</span><h4>Grid Garden</h4><p>Learn CSS Grid interactively</p><span class="r-tag">FREE</span></div>
+        <div class="resource-card"><span class="r-icon">🎨</span><h4>CSS Tricks</h4><p>The best CSS reference and tutorials on the web</p><span class="r-tag">FREE</span></div>
+        <div class="resource-card"><span class="r-icon">📐</span><h4>Kevin Powell YT</h4><p>The best CSS teacher on YouTube, period</p><span class="r-tag">FREE</span></div>
+      </div>
+    </div>
+    <div class="week-nav">
+      <button class="w-btn w-btn-prev" onclick="goWeek(1)">← Week 2</button>
+      <button class="w-btn w-btn-next" onclick="goWeek(3)">Week 4: APIs →</button>
+    </div>
+  </div>
+
+  <!-- WEEK 4 -->
+  <div class="week-panel" id="panel-3">
+    <div class="week-card reveal">
+      <div class="week-card-header">
+        <span class="week-emoji">📡</span>
+        <div>
+          <h2>Week 4 — APIs & Real Data</h2>
+          <p>Connect your app to the real world with live data</p>
+        </div>
+      </div>
+      <p class="week-desc">
+        This is where your apps stop being static and start being <strong>alive</strong>. An API (Application Programming Interface) is a way for your code to talk to other services — weather, maps, sports scores, cryptocurrency, AI, and thousands more.
+        <br><br>
+        You'll learn how to use <strong>fetch()</strong> to make HTTP requests, how to handle <strong>async/await</strong> (because data takes time to arrive), and how to display real data in your UI. By the end of this week, you'll have built a real weather app or movie search app that talks to a live server.
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+          <span class="code-title">fetch_weather.js</span>
+        </div>
+        <div class="code-body">
+          <div><span class="ln">1</span><span class="cm">// Fetching real weather data from an API</span></div>
+          <div><span class="ln">2</span><span class="kw">async function</span> <span class="fn">getWeather</span>(city) {</div>
+          <div><span class="ln">3</span>&nbsp;&nbsp;<span class="kw">const</span> <span class="vr">url</span> = <span class="str">`https://wttr.in/${city}?format=j1`</span>;</div>
+          <div><span class="ln">4</span>&nbsp;&nbsp;<span class="kw">const</span> <span class="vr">response</span> = <span class="kw">await</span> <span class="fn">fetch</span>(url); <span class="cm">// wait for data</span></div>
+          <div><span class="ln">5</span>&nbsp;&nbsp;<span class="kw">const</span> <span class="vr">data</span> = <span class="kw">await</span> response.<span class="fn">json</span>(); <span class="cm">// parse JSON</span></div>
+          <div><span class="ln">6</span>&nbsp;&nbsp;<span class="kw">const</span> <span class="vr">temp</span> = data.current_condition[<span class="nt">0</span>].temp_C;</div>
+          <div><span class="ln">7</span>&nbsp;&nbsp;<span class="kw">return</span> <span class="str">`${city}: ${temp}°C`</span>;</div>
+          <div><span class="ln">8</span>}</div>
+          <div><span class="ln">9</span>&nbsp;</div>
+          <div><span class="ln">10</span><span class="fn">getWeather</span>(<span class="str">"Paris"</span>).<span class="fn">then</span>(result => console.<span class="fn">log</span>(result));</div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Orbitron',monospace;font-size:0.9rem;color:#fff;margin-bottom:1rem;">✅ Week 4 Tasks:</h3>
+      <div class="task-list" id="tasks-3">
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Read: "What is an API?" — ask Claude to explain it with a real-world analogy</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Use the fetch() example above — open browser console and run it</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Sign up for a free API key at openweathermap.org or omdbapi.com</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Build a weather app OR a movie search app using your API key + AI help</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Add proper error handling: what happens if the user types a city that doesn't exist?</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Add a loading spinner while data is being fetched (ask AI how!)</span></div>
+      </div>
+
+      <div class="quiz-box">
+        <h4>// WEEK 4 QUIZ</h4>
+        <p class="quiz-q">What does the "await" keyword do in JavaScript?</p>
+        <div class="quiz-options" id="quiz-3">
+          <button class="quiz-opt" onclick="answer(this,'wrong','quiz-3','res-3')">It stops the entire program until the task is done</button>
+          <button class="quiz-opt" onclick="answer(this,'correct','quiz-3','res-3')">It pauses that async function until a Promise resolves, without blocking other code</button>
+          <button class="quiz-opt" onclick="answer(this,'wrong','quiz-3','res-3')">It makes code run faster</button>
+          <button class="quiz-opt" onclick="answer(this,'wrong','quiz-3','res-3')">It creates a delay timer in milliseconds</button>
+        </div>
+        <div class="quiz-result" id="res-3"></div>
+      </div>
+
+      <div class="resources-grid">
+        <div class="resource-card"><span class="r-icon">🌤️</span><h4>OpenWeather API</h4><p>Free weather data API for your apps</p><span class="r-tag">FREE TIER</span></div>
+        <div class="resource-card"><span class="r-icon">🎬</span><h4>OMDB API</h4><p>Movie database API — perfect for search apps</p><span class="r-tag">FREE</span></div>
+        <div class="resource-card"><span class="r-icon">🐶</span><h4>Dog.CEO API</h4><p>A fun, simple API to practice with — returns dog photos!</p><span class="r-tag">FREE</span></div>
+        <div class="resource-card"><span class="r-icon">📊</span><h4>Public APIs List</h4><p>github.com/public-apis — 100s of free APIs to explore</p><span class="r-tag">FREE</span></div>
+      </div>
+    </div>
+    <div class="week-nav">
+      <button class="w-btn w-btn-prev" onclick="goWeek(2)">← Week 3</button>
+      <button class="w-btn w-btn-next" onclick="goWeek(4)">Week 5: React →</button>
+    </div>
+  </div>
+
+  <!-- WEEK 5 -->
+  <div class="week-panel" id="panel-4">
+    <div class="week-card reveal">
+      <div class="week-card-header">
+        <span class="week-emoji">⚛️</span>
+        <div>
+          <h2>Week 5 — React Fundamentals</h2>
+          <p>Build component-based UIs with the world's most popular framework</p>
+        </div>
+      </div>
+      <p class="week-desc">
+        React is the most widely used JavaScript framework in the world. It lets you build UIs from <strong>components</strong> — small, reusable pieces of UI that manage their own data and update automatically when that data changes. Think of components like LEGO bricks for building interfaces.
+        <br><br>
+        The key concept is <strong>state</strong> — data that lives inside a component. When state changes, React automatically re-renders the UI to reflect it. This "reactivity" is what makes React so powerful. With AI, you can generate entire component trees in minutes and focus on the logic and user experience.
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+          <span class="code-title">Counter.jsx</span>
+        </div>
+        <div class="code-body">
+          <div><span class="ln">1</span><span class="kw">import</span> { useState } <span class="kw">from</span> <span class="str">"react"</span>;</div>
+          <div><span class="ln">2</span>&nbsp;</div>
+          <div><span class="ln">3</span><span class="cm">// A simple React component with state</span></div>
+          <div><span class="ln">4</span><span class="kw">export default function</span> <span class="fn">Counter</span>() {</div>
+          <div><span class="ln">5</span>&nbsp;&nbsp;<span class="kw">const</span> [<span class="vr">count</span>, <span class="vr">setCount</span>] = <span class="fn">useState</span>(<span class="nt">0</span>);</div>
+          <div><span class="ln">6</span>&nbsp;</div>
+          <div><span class="ln">7</span>&nbsp;&nbsp;<span class="kw">return</span> (</div>
+          <div><span class="ln">8</span>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="nt">div</span>&gt;</div>
+          <div><span class="ln">9</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="nt">h2</span>&gt;Count: {count}&lt;/<span class="nt">h2</span>&gt;</div>
+          <div><span class="ln">10</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="fn">button</span> onClick={() =&gt; <span class="fn">setCount</span>(count + <span class="nt">1</span>)}&gt;</div>
+          <div><span class="ln">11</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Click me!</div>
+          <div><span class="ln">12</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span class="fn">button</span>&gt;</div>
+          <div><span class="ln">13</span>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span class="nt">div</span>&gt;</div>
+          <div><span class="ln">14</span>&nbsp;&nbsp;);</div>
+          <div><span class="ln">15</span>}</div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Orbitron',monospace;font-size:0.9rem;color:#fff;margin-bottom:1rem;">✅ Week 5 Tasks:</h3>
+      <div class="task-list" id="tasks-4">
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Set up a React project using: npm create vite@latest my-app -- --template react</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Build the Counter component above and make it work in your browser</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Understand useState: build a color picker that changes the page background</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Learn useEffect: fetch weather data when the component loads (combine week 4 + 5!)</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Build a small React app with at least 3 components (e.g. Header, Card, Footer)</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Ask AI to generate a full component, then refactor it to add one improvement yourself</span></div>
+      </div>
+
+      <div class="quiz-box">
+        <h4>// WEEK 5 QUIZ</h4>
+        <p class="quiz-q">In React, what happens when you call a state setter function (like setCount)?</p>
+        <div class="quiz-options" id="quiz-4">
+          <button class="quiz-opt" onclick="answer(this,'wrong','quiz-4','res-4')">Nothing — you have to refresh the page manually</button>
+          <button class="quiz-opt" onclick="answer(this,'wrong','quiz-4','res-4')">The entire webpage reloads from scratch</button>
+          <button class="quiz-opt" onclick="answer(this,'correct','quiz-4','res-4')">React re-renders the component with the new state value automatically</button>
+          <button class="quiz-opt" onclick="answer(this,'wrong','quiz-4','res-4')">It saves the value to localStorage</button>
+        </div>
+        <div class="quiz-result" id="res-4"></div>
+      </div>
+
+      <div class="resources-grid">
+        <div class="resource-card"><span class="r-icon">⚛️</span><h4>React Docs</h4><p>react.dev — the official, excellent React documentation</p><span class="r-tag">FREE</span></div>
+        <div class="resource-card"><span class="r-icon">⚡</span><h4>Vite</h4><p>vitejs.dev — blazing fast React project setup</p><span class="r-tag">FREE</span></div>
+        <div class="resource-card"><span class="r-icon">🎨</span><h4>Tailwind CSS</h4><p>Utility CSS framework — pairs perfectly with React</p><span class="r-tag">FREE</span></div>
+        <div class="resource-card"><span class="r-icon">📺</span><h4>Scrimba React</h4><p>Interactive React course you can code inside the video</p><span class="r-tag">FREE</span></div>
+      </div>
+    </div>
+    <div class="week-nav">
+      <button class="w-btn w-btn-prev" onclick="goWeek(3)">← Week 4</button>
+      <button class="w-btn w-btn-next" onclick="goWeek(5)">Week 6: Ship It! →</button>
+    </div>
+  </div>
+
+  <!-- WEEK 6 -->
+  <div class="week-panel" id="panel-5">
+    <div class="week-card reveal">
+      <div class="week-card-header">
+        <span class="week-emoji">🚀</span>
+        <div>
+          <h2>Week 6 — Ship Your Project</h2>
+          <p>Build something real, deploy it live, and share it with the world</p>
+        </div>
+      </div>
+      <p class="week-desc">
+        This is it — the week everything comes together. You'll pick a project idea that genuinely excites you, build it using everything from weeks 1–5, and <strong>deploy it live on the internet</strong> for anyone to use. This is not a tutorial project — it's your own creation.
+        <br><br>
+        Deploying is easier than ever. <strong>Vercel</strong> and <strong>Netlify</strong> let you push your code and have it live in 60 seconds — for free. You'll also create a GitHub repository for your project, which serves as your public portfolio. By end of this week, you are no longer "learning to code." You are a <strong>vibe coder who ships</strong>.
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+          <span class="code-title">deploy_checklist.sh</span>
+        </div>
+        <div class="code-body">
+          <div><span class="ln">1</span><span class="cm"># Deploy to Vercel in 3 commands:</span></div>
+          <div><span class="ln">2</span>&nbsp;</div>
+          <div><span class="ln">3</span><span class="cm"># 1. Install Vercel CLI</span></div>
+          <div><span class="ln">4</span><span class="nt">$</span> npm install -g vercel</div>
+          <div><span class="ln">5</span>&nbsp;</div>
+          <div><span class="ln">6</span><span class="cm"># 2. Build your project</span></div>
+          <div><span class="ln">7</span><span class="nt">$</span> npm run build</div>
+          <div><span class="ln">8</span>&nbsp;</div>
+          <div><span class="ln">9</span><span class="cm"># 3. Deploy! Follow the prompts</span></div>
+          <div><span class="ln">10</span><span class="nt">$</span> vercel --prod</div>
+          <div><span class="ln">11</span>&nbsp;</div>
+          <div><span class="ln">12</span><span class="cm"># Your app is now live at yourapp.vercel.app 🎉</span></div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Orbitron',monospace;font-size:0.9rem;color:#fff;margin-bottom:1rem;">✅ Week 6 Final Tasks:</h3>
+      <div class="task-list" id="tasks-5">
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Pick your project: weather app, portfolio, quiz game, chat UI, or your own idea</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Create a GitHub repository and push your code</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Deploy to Vercel (vercel.com) or Netlify (netlify.com) — it's free and takes 2 minutes</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Write a README.md explaining what your project does and how to run it</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Share your live URL on LinkedIn, X/Twitter, or Reddit r/webdev — you deserve to celebrate!</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">🎉 You did it. Now pick a harder project and do it again.</span></div>
+      </div>
+
+      <div style="background:linear-gradient(135deg,rgba(0,245,212,0.08),rgba(155,93,229,0.08));border:1px solid rgba(0,245,212,0.2);border-radius:16px;padding:2rem;margin-bottom:2rem;text-align:center;">
+        <div style="font-size:3rem;margin-bottom:1rem;">🏆</div>
+        <h3 style="font-family:'Orbitron',monospace;font-size:1.1rem;color:#fff;margin-bottom:0.6rem;">You've Completed the AbdouVibe Journey</h3>
+        <p style="color:#6b7280;font-size:0.88rem;line-height:1.7;">In 6 weeks you went from zero to shipping a real project. You know HTML, CSS, JavaScript, APIs, React, Git, and how to work with AI. That's not beginner territory anymore. Keep building. Keep shipping. The vibe never stops.</p>
+      </div>
+
+      <div class="resources-grid">
+        <div class="resource-card"><span class="r-icon">🟢</span><h4>Vercel</h4><p>Deploy web apps instantly — free for personal projects</p><span class="r-tag">FREE</span></div>
+        <div class="resource-card"><span class="r-icon">🌐</span><h4>Netlify</h4><p>Another great free hosting platform</p><span class="r-tag">FREE</span></div>
+        <div class="resource-card"><span class="r-icon">🐱</span><h4>GitHub</h4><p>Host your code and build your portfolio</p><span class="r-tag">FREE</span></div>
+        <div class="resource-card"><span class="r-icon">📝</span><h4>readme.so</h4><p>Easy README generator for your projects</p><span class="r-tag">FREE</span></div>
+      </div>
+    </div>
+    <div class="week-nav">
+      <button class="w-btn w-btn-prev" onclick="goWeek(4)">← Week 5</button>
+      <a href="./abdouvibe.html" class="w-btn w-btn-next" style="text-decoration:none;display:inline-flex;align-items:center;">Back to AbdouVibe 🏠</a>
+    </div>
+  </div>
+
+</div><!-- end week-content -->
+
+<script>
+  // Cursor
+  const cursor=document.getElementById('cursor'),trail=document.getElementById('trail');
+  let mx=0,my=0,tx=0,ty=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.transform=`translate(${mx-7}px,${my-7}px)`;});
+  setInterval(()=>{tx+=(mx-tx)*0.15;ty+=(my-ty)*0.15;trail.style.transform=`translate(${tx-18}px,${ty-18}px)`;},16);
+
+  // Scroll reveal
+  const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}}),{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+  // Week navigation
+  let currentWeek = 0;
+  const doneWeeks = new Set();
+
+  function goWeek(n) {
+    // mark current as done
+    doneWeeks.add(currentWeek);
+    document.getElementById('panel-'+currentWeek).classList.remove('active');
+    document.querySelectorAll('.week-tab')[currentWeek].classList.remove('active');
+    document.querySelectorAll('.week-tab')[currentWeek].classList.add('done');
+
+    currentWeek = n;
+    document.getElementById('panel-'+n).classList.add('active');
+    const tabs = document.querySelectorAll('.week-tab');
+    tabs.forEach((t,i)=>{
+      t.classList.remove('active');
+      if(i===n) t.classList.add('active');
+    });
+
+    // update progress
+    const pct = Math.round(((n) / 6) * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-label').textContent = `Week ${n+1} of 6`;
+
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  // Task toggle
+  function toggleTask(el) {
+    el.classList.toggle('checked');
+    if(el.classList.contains('checked')) {
+      el.querySelector('.task-check').textContent = '✓';
+    } else {
+      el.querySelector('.task-check').textContent = '';
+    }
+  }
+
+  // Quiz answer
+  function answer(btn, result, quizId, resId) {
+    const opts = document.querySelectorAll('#'+quizId+' .quiz-opt');
+    opts.forEach(o=>o.disabled=true);
+    btn.classList.add(result);
+    const res = document.getElementById(resId);
+    res.classList.add('show');
+    if(result==='correct'){
+      res.classList.add('ok');
+      res.textContent = '✅ Correct! Great work — you\'ve got this concept down.';
+    } else {
+      res.classList.add('bad');
+      res.textContent = '❌ Not quite — check the highlighted correct answer and re-read the explanation above.';
+      // highlight correct
+      opts.forEach(o=>{if(o.onclick.toString().includes('correct')) o.classList.add('correct');});
+    }
+  }
+</script>
+
+<script>
+// Fix navigation for file:// protocol (local file opening)
+document.addEventListener('click', function(e) {
+  const a = e.target.closest('a');
+  if (!a) return;
+  const href = a.getAttribute('href');
+  if (!href) return;
+  // Only handle local .html links
+  if (href.match(/^\.?\/?[a-zA-Z0-9_-]+\.html$/) || href.match(/^\.\/[a-zA-Z0-9_-]+\.html$/)) {
+    e.preventDefault();
+    // Normalize: strip leading ./
+    const page = href.replace(/^\.\//, '');
+    // Get base path of current file
+    const base = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+    window.location.href = base + page;
+  }
+});
+</script>
+
+</body>
+</html>

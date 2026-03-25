@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Contact Us — AbdouVibe</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Syne:wght@400;600;800&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet"/>
+<style>
+  :root{--neon:#00f5d4;--pink:#ff2d78;--purple:#9b5de5;--yellow:#fee440;--dark:#050810;--dark2:#0d1117;--ig:#e1306c;}
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Syne',sans-serif;background:var(--dark);color:#e8eaf0;overflow-x:hidden;cursor:none;min-height:100vh;display:flex;flex-direction:column;}
+
+  .cursor{width:14px;height:14px;background:var(--neon);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:99999;box-shadow:0 0 12px var(--neon),0 0 30px var(--neon);mix-blend-mode:screen;}
+  .cursor-trail{width:36px;height:36px;border:1.5px solid rgba(0,245,212,0.4);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:99998;transition:transform 0.18s ease;}
+
+  /* BG */
+  .bg-grid{position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(225,48,108,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(225,48,108,0.025) 1px,transparent 1px);background-size:60px 60px;transform:rotateX(60deg) scale(2.5) translateY(-10%);transform-origin:top center;animation:gm 14s linear infinite;}
+  @keyframes gm{from{background-position:0 0;}to{background-position:0 60px;}}
+
+  /* Animated gradient bg */
+  .bg-aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+  .aurora-orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:0.15;}
+  .ao1{width:700px;height:700px;background:radial-gradient(circle,#e1306c,#833ab4);top:-200px;right:-100px;animation:ao 10s ease-in-out infinite alternate;}
+  .ao2{width:500px;height:500px;background:radial-gradient(circle,#405de6,#5851db);bottom:-100px;left:-100px;animation:ao 8s ease-in-out 3s infinite alternate;}
+  .ao3{width:350px;height:350px;background:radial-gradient(circle,var(--neon),var(--purple));top:40%;left:40%;animation:ao 6s ease-in-out 1s infinite alternate;}
+  @keyframes ao{from{transform:translate(0,0) scale(1);}to{transform:translate(30px,-50px) scale(1.1);}}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(5,8,16,0.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(225,48,108,0.15);}
+  .logo{font-family:'Orbitron',monospace;font-weight:900;font-size:1.4rem;color:var(--neon);text-shadow:0 0 20px var(--neon);letter-spacing:2px;text-decoration:none;}
+  .logo span{color:var(--pink);}
+  .back-btn{font-family:'Orbitron',monospace;font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;padding:0.55rem 1.3rem;border-radius:6px;background:transparent;color:#6b7280;border:1px solid rgba(255,255,255,0.08);transition:all 0.2s;cursor:none;}
+  .back-btn:hover{color:var(--neon);border-color:rgba(0,245,212,0.3);}
+
+  /* MAIN */
+  main{flex:1;display:flex;align-items:center;justify-content:center;padding:8rem 2rem 4rem;position:relative;z-index:1;}
+
+  .contact-card{
+    max-width:560px;width:100%;
+    background:rgba(13,10,20,0.85);
+    border:1px solid rgba(225,48,108,0.2);
+    border-radius:28px;
+    padding:3.5rem;
+    text-align:center;
+    backdrop-filter:blur(30px);
+    box-shadow:0 40px 100px rgba(0,0,0,0.7),0 0 60px rgba(225,48,108,0.08);
+    animation:cardIn 0.8s cubic-bezier(0.22,1,0.36,1) both;
+    position:relative;overflow:hidden;
+  }
+  .contact-card::before{
+    content:'';position:absolute;inset:0;border-radius:28px;
+    background:radial-gradient(ellipse at top,rgba(225,48,108,0.06) 0%,transparent 60%);
+    pointer-events:none;
+  }
+  @keyframes cardIn{from{opacity:0;transform:translateY(40px) scale(0.97);}to{opacity:1;transform:translateY(0) scale(1);}}
+
+  /* INSTAGRAM ICON */
+  .ig-icon-wrap{
+    width:90px;height:90px;border-radius:22px;
+    background:linear-gradient(135deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 1.8rem;
+    box-shadow:0 0 40px rgba(225,48,108,0.4),0 10px 30px rgba(0,0,0,0.5);
+    animation:igPulse 3s ease-in-out infinite;
+    position:relative;
+  }
+  @keyframes igPulse{
+    0%,100%{box-shadow:0 0 40px rgba(225,48,108,0.4),0 10px 30px rgba(0,0,0,0.5);}
+    50%{box-shadow:0 0 60px rgba(225,48,108,0.65),0 10px 40px rgba(0,0,0,0.6);}
+  }
+  .ig-icon-wrap svg{width:48px;height:48px;fill:#fff;}
+
+  /* BADGE */
+  .contact-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:0.68rem;letter-spacing:3px;color:var(--ig);text-transform:uppercase;border:1px solid rgba(225,48,108,0.3);padding:0.35rem 1rem;border-radius:100px;background:rgba(225,48,108,0.08);margin-bottom:1.5rem;}
+
+  .contact-card h1{font-family:'Orbitron',monospace;font-size:clamp(1.6rem,4vw,2.3rem);font-weight:900;color:#fff;margin-bottom:1rem;line-height:1.2;}
+  .contact-card h1 em{font-style:normal;background:linear-gradient(90deg,#f09433,#e6683c,#dc2743,#cc2366);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+  .contact-card p.intro{font-size:0.93rem;color:#8892b0;line-height:1.8;margin-bottom:2rem;}
+  .contact-card p.intro strong{color:#e2e8f0;}
+
+  /* STEPS */
+  .steps{display:flex;flex-direction:column;gap:0.8rem;margin-bottom:2rem;text-align:left;}
+  .step{display:flex;align-items:flex-start;gap:1rem;padding:1rem 1.2rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;}
+  .step-n{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;color:rgba(225,48,108,0.6);min-width:1.5rem;line-height:1.5;}
+  .step p{font-size:0.85rem;color:#8892b0;line-height:1.65;margin:0;}
+  .step p strong{color:#e2e8f0;}
+
+  /* HANDLE */
+  .handle-box{
+    background:rgba(225,48,108,0.07);
+    border:1px solid rgba(225,48,108,0.2);
+    border-radius:12px;padding:1rem 1.5rem;
+    margin-bottom:2rem;
+    display:flex;align-items:center;justify-content:center;gap:0.7rem;
+  }
+  .at-sym{font-family:'JetBrains Mono',monospace;font-size:1.1rem;color:rgba(225,48,108,0.5);}
+  .handle{font-family:'JetBrains Mono',monospace;font-size:1rem;color:#e2e8f0;font-weight:600;letter-spacing:1px;}
+
+  /* MAIN BUTTON */
+  .btn-instagram{
+    display:flex;align-items:center;justify-content:center;gap:0.8rem;
+    width:100%;padding:1.2rem;border-radius:14px;
+    background:linear-gradient(135deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+    font-family:'Orbitron',monospace;font-size:0.85rem;font-weight:900;
+    letter-spacing:2px;text-transform:uppercase;text-decoration:none;color:#fff;
+    border:none;cursor:none;
+    transition:transform 0.25s,box-shadow 0.25s,filter 0.25s;
+    box-shadow:0 0 30px rgba(225,48,108,0.4),0 10px 40px rgba(0,0,0,0.5);
+    margin-bottom:1rem;
+    position:relative;overflow:hidden;
+  }
+  .btn-instagram::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent 50%);opacity:0;transition:opacity 0.3s;}
+  .btn-instagram:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 0 50px rgba(225,48,108,0.55),0 16px 50px rgba(0,0,0,0.6);filter:brightness(1.1);}
+  .btn-instagram:hover::before{opacity:1;}
+  .btn-instagram svg{width:22px;height:22px;fill:#fff;flex-shrink:0;}
+
+  .btn-back-store{
+    display:flex;align-items:center;justify-content:center;gap:0.6rem;
+    width:100%;padding:1rem;border-radius:14px;
+    background:transparent;
+    font-family:'Orbitron',monospace;font-size:0.75rem;font-weight:700;
+    letter-spacing:2px;text-transform:uppercase;text-decoration:none;color:#4a5568;
+    border:1px solid rgba(255,255,255,0.07);cursor:none;
+    transition:all 0.2s;
+  }
+  .btn-back-store:hover{color:var(--neon);border-color:rgba(0,245,212,0.3);background:rgba(0,245,212,0.04);}
+
+  .note{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:#2d3748;margin-top:1.5rem;display:flex;align-items:center;justify-content:center;gap:0.4rem;}
+  .note span{font-size:0.9rem;}
+
+  /* Floating particles */
+  .particles{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+  .particle{position:absolute;width:3px;height:3px;border-radius:50%;background:rgba(225,48,108,0.4);animation:particleFloat linear infinite;}
+  @keyframes particleFloat{0%{transform:translateY(100vh) scale(0);opacity:0;}10%{opacity:1;}90%{opacity:0.5;}100%{transform:translateY(-10vh) scale(1);opacity:0;}}
+
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-track{background:var(--dark2);}
+  ::-webkit-scrollbar-thumb{background:rgba(225,48,108,0.3);border-radius:3px;}
+  @media(max-width:600px){nav{padding:1rem 1.2rem;}.contact-card{padding:2.5rem 1.5rem;}}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="trail"></div>
+<div class="bg-grid"></div>
+<div class="bg-aurora">
+  <div class="aurora-orb ao1"></div>
+  <div class="aurora-orb ao2"></div>
+  <div class="aurora-orb ao3"></div>
+</div>
+<div class="particles" id="particles"></div>
+
+<nav>
+  <a href="./abdouvibe.html" class="logo">Abdou<span>Vibe</span></a>
+  <a href="./ebook.html" class="back-btn">← Back to Store</a>
+</nav>
+
+<main>
+  <div class="contact-card">
+
+    <!-- IG ICON -->
+    <div class="ig-icon-wrap">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+      </svg>
+    </div>
+
+    <div class="contact-badge">📲 Order via Instagram</div>
+
+    <h1>Get Your eBook on<br/><em>Instagram</em></h1>
+
+    <p class="intro">
+      We deliver the <strong>Vibe Coding Mastery</strong> eBook directly via Instagram DM. It's fast, simple, and secure — no account or app store required.
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">1</div>
+        <p><strong>Tap the button below</strong> to open our Instagram profile <strong>@codevibehub</strong></p>
+      </div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <p><strong>Send us a DM</strong> saying <strong>"I want the Vibe Coding Mastery eBook"</strong></p>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <p><strong>We'll reply with payment details</strong> ($1.99) and send you the PDF instantly after confirmation</p>
+      </div>
+    </div>
+
+    <div class="handle-box">
+      <span class="at-sym">@</span>
+      <span class="handle">codevibehub</span>
+    </div>
+
+    <a
+      href="https://www.instagram.com/codevibehub?igsh=MWU3MDVqMWFnOXRwag=="
+      target="_blank"
+      rel="noopener"
+      class="btn-instagram"
+    >
+      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      Open @codevibehub on Instagram
+    </a>
+
+    <a href="./ebook.html" class="btn-back-store">← Back to Store</a>
+
+    <div class="note"><span>🔒</span> Secure · Fast delivery · No subscription</div>
+  </div>
+</main>
+
+<script>
+  const cursor=document.getElementById('cursor'),trail=document.getElementById('trail');
+  let mx=0,my=0,tx=0,ty=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.transform=`translate(${mx-7}px,${my-7}px)`;});
+  setInterval(()=>{tx+=(mx-tx)*0.15;ty+=(my-ty)*0.15;trail.style.transform=`translate(${tx-18}px,${ty-18}px)`;},16);
+
+  // Floating particles
+  const container = document.getElementById('particles');
+  for(let i=0;i<25;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.cssText=`left:${Math.random()*100}%;width:${Math.random()*4+1}px;height:${Math.random()*4+1}px;animation-duration:${Math.random()*12+8}s;animation-delay:${Math.random()*8}s;opacity:${Math.random()*0.5+0.1};`;
+    container.appendChild(p);
+  }
+</script>
+
+<script>
+// Fix navigation for file:// protocol (local file opening)
+document.addEventListener('click', function(e) {
+  const a = e.target.closest('a');
+  if (!a) return;
+  const href = a.getAttribute('href');
+  if (!href) return;
+  // Only handle local .html links
+  if (href.match(/^\.?\/?[a-zA-Z0-9_-]+\.html$/) || href.match(/^\.\/[a-zA-Z0-9_-]+\.html$/)) {
+    e.preventDefault();
+    // Normalize: strip leading ./
+    const page = href.replace(/^\.\//, '');
+    // Get base path of current file
+    const base = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+    window.location.href = base + page;
+  }
+});
+</script>
+
+</body>
+</html>
